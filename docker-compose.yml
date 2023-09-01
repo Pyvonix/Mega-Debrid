@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+
+  worker:
+    build:
+      dockerfile: ./megadebrid/worker/Dockerfile
+    container_name: mega-worker
+    command: celery -A megadebrid.worker worker -l INFO --logfile=/var/log/celery.log
+    volumes:
+      - /home/user/.mega/config:/root/.mega/config:ro
+      - /home/user/Downloads:/root/Downloads
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    depends_on:
+      - redis
+
+  web:
+    build:
+      dockerfile: ./megadebrid/web/Dockerfile
+    container_name: mega-web
+    ports:
+      - 5000:5000
+    command: python manage.py run -h 0.0.0.0
+    environment:
+      - FLASK_DEBUG=1
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    depends_on:
+      - redis
+      - worker
+
+  dashboard:
+    build:
+      dockerfile: ./megadebrid/dashboard/Dockerfile
+    container_name: mega-dashboard
+    command: celery --app megadebrid.worker --broker=redis://redis:6379/0 flower --port=5555
+    ports:
+      - 5555:5555
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    depends_on:
+      - redis
+      - web
+      - worker
+
+  redis:
+    image: redis:7-alpine
+    container_name: mega-redis

@@ -1,0 +1,10 @@
+aiofiles
+aiohttp[speedups]
+aioresponses
+bs4
+celery
+celery[redis]
+flask
+flask[async]
+redis
+wtforms

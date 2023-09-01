@@ -1,0 +1,21 @@
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    padding-top: 2rem;
+    margin-bottom: 60px;
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    width: 100%;
+    padding-right: calc(var(--bs-gutter-x) * .5);
+    padding-left: calc(var(--bs-gutter-x) * .5);
+    text-align: center;
+    line-height: 50px;
+}

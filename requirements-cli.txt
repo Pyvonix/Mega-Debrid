@@ -1,0 +1,3 @@
+aiofiles
+aiohttp[speedups]
+bs4

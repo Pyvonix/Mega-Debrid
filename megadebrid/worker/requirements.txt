@@ -1,0 +1,7 @@
+aiofiles
+aiohttp[speedups]
+bs4
+celery
+celery[redis]
+redis
+#sqlalchemy             # for persistent 'result_backend'

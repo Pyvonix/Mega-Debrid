@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+  <div class="starter-template">
+    <h1>Mega-Web</h1>
+    <hr>
+    <div>
+      <h3>Task</h3>
+      <p>Pick the Mega-Task you to launch with the worker.</p>
+      <div class="btn-toolbar justify-content-around" role="toolbar">
+        {% for action_id, action_dict in actions.items() %}
+        <div class="btn-group" role="group">
+          <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#{{ action_id }}" data-bs-parent="#collapse-group" aria-expanded="false" aria-controls="{{ action_id }}">
+            {{ action_dict['desc'] }}
+          </button>
+        </div>
+        {% endfor %}
+      </div>
+      <div id="collapse-group" class="collapse-group mt-2" >
+        {% for action_id, action_dict  in actions.items() %}
+        <div id="{{ action_id }}" class="collapse" data-bs-parent="#collapse-group">
+          <form id="Form{{ action_id }}" class="card card-body">
+            {% for element in action_dict['form']() %}
+              {{ element.label(class_='form-label') }}
+              {{ element() }}
+            {% endfor %}
+            <button type="button" class="btn btn-primary" onclick="handleClick('{{ action_id }}')">Launch</button>
+          </form>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    <br><br>
+    <div>
+      <h3>Task Status</h3>
+      <br>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Status</th>
+            <th>Result</th>
+          </tr>
+        </thead>
+        <tbody id="tasks">
+        </tbody>
+      </table>
+    </div>
+  </div>
+{% endblock %}
